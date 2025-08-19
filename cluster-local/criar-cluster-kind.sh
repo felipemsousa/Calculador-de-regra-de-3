@@ -36,3 +36,12 @@ if [ $? -eq 0 ]; then
 else
     echo "❌ Falha ao criar o cluster."
 fi
+
+# Instala o Metric-Server
+echo "Instalando o Metric-Server no '$CLUSTER_NAME'..."
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.5.0/components.yaml
+
+# Configura o Metric-Server
+echo "Configura o Metric-Server para funcionar no '$CLUSTER_NAME'..."
+kubectl patch -n kube-system deployment metrics-server --type=json \
+  -p '[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
