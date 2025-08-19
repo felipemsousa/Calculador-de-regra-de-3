@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: regra-de-tres-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: regra-de-tres
+  template:
+    metadata:
+      labels:
+        app: regra-de-tres
+    spec:
+      containers:
+      - name: regra-de-tres
+        image: app/regra-de-3:v2.0
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "500m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5000
+        imagePullPolicy: IfNotPresent
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                - key: regra
+                  operator: In
+                  values:
+                  - regra-de-tres
+    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: regra-de-tres-service
+spec:
+  selector:
+    app: regra-de-tres
+  ports:
+  - port: 5000
+    targetPort: 5000
+  type: NodePort
