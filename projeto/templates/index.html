@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Referenciando o CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Calculadora de Regra de 3</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🧮 Calculadora de Regra de 3</h1>
+        <p class="subtitle">Resolva proporções de forma rápida e precisa</p>
+
+        <div class="formula-display">
+            <div class="formula-title">FÓRMULA</div>
+            <div class="formula">
+                <span class="variavel">A</span> → <span class="variavel">B</span>
+            </div>
+            <div class="formula">
+                Assim como:
+            </div>
+            <div class="formula">
+                <span class="variavel">C</span> → <span class="variavel">X</span>
+            </div>
+
+            <div class="formula-explanation">X = (C × B) ÷ A</div>
+        </div>
+
+        <form id="calculatorForm">
+            <div class="input-group">
+                <label for="valorA">Valor A:</label>
+                <input type="number" id="valorA" step="any" placeholder="Digite o valor A" required>
+            </div>
+
+            <div class="input-group">
+                <label for="valorB">Valor B:</label>
+                <input type="number" id="valorB" step="any" placeholder="Digite o valor B" required>
+            </div>
+
+            <div class="input-group">
+                <label for="valorC">Valor C:</label>
+                <input type="number" id="valorC" step="any" placeholder="Digite o valor C" required>
+            </div>
+
+            <button type="submit" id="calculateBtn" class="calculate-btn">
+                <span id="btnText">Calcular X</span>
+            </button>
+        </form>
+
+        <div id="result" class="result">
+            <div class="result-value">X = <span id="resultValue"></span></div>
+            <div class="result-formula" id="resultFormula"></div>
+            <div class="result-calculation" id="resultCalculation"></div>
+        </div>
+
+        <div id="error" class="error">
+            <span id="errorMessage"></span>
+        </div>
+
+        <button type="button" id="clearBtn" class="clear-btn">🗑️ Limpar Campos</button>
+    </div>
+
+    <!-- Referenciando o JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>
