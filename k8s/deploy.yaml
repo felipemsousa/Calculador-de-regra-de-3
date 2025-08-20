@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: regra-de-tres
-        image: app/regra-de-3:v2.0
+        image: app/regra-de-tres:v1.0
         resources:
           requests:
             memory: "128Mi"
@@ -51,3 +51,22 @@ spec:
   - port: 5000
     targetPort: 5000
   type: NodePort
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: regra-de-tres-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: regra-de-tres-service
+            port: 
+              number: 5000
+---
