@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: readonly-user-name
+  namespace: kubernetes-dashboard
+  
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: readonly-role
+  namespace: ingress-nginx
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets", "replicationcontrollers", "endpoints"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "statefulsets", "replicasets", "daemonsets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["autoscaling"]
+  resources: ["horizontalpodautoscalers"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get", "list", "watch"]
+  
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: readonly-binding
+  namespace: ingress-nginx
+subjects:
+- kind: ServiceAccount
+  name: readonly-user-name
+  namespace: kubernetes-dashboard
+roleRef:
+  kind: Role
+  name: readonly-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# Permite listar os nomes dos namespaces
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: readonly-namespaces-lister
+rules:
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "list", "watch"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: readonly-namespaces-lister-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: readonly-namespaces-lister
+subjects:
+- kind: ServiceAccount
+  name: readonly-user-name
+  namespace: kubernetes-dashboard
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: readonly-user-name
+  namespace: kubernetes-dashboard
+  annotations:
+    kubernetes.io/service-account.name: "readonly-user-name"
+type: kubernetes.io/service-account-token
