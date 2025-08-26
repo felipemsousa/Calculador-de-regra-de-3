@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: caos
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/felipemsousa/Calculadora-regra-de-3.git
+    path: caos
+    targetRevision: feature/testes
+  destination:
+    namespace: caos
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated: 
+      prune: true
+      selfHeal: true
