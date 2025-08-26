@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: regra-de-tres-deploy
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: regra-de-tres
